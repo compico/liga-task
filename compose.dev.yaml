@@ -25,7 +25,7 @@ services:
 
   mysql:
     restart: unless-stopped
-    image: mysql:8-alpine
+    image: mariadb:11.8-noble
     container_name: liga-task-mysql
     ports:
       - '${FORWARD_DB_PORT:-3307}:3306'

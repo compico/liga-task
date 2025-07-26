@@ -1,6 +1,6 @@
 FROM node:24-alpine
 
-RUN addgroup -g 82 www-data && adduser -u 1000 -G www-data -s /bin/sh -D appuser
+RUN addgroup node www-data
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY package*.json ./
 
 RUN npm ci --only=production
 
-RUN chown -R appuser:node /app
+RUN chown -R node:www-data /app
 
 USER node
 

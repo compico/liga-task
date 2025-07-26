@@ -18,13 +18,15 @@ RUN apk add --no-cache --virtual .build-deps \
         libzip-dev \
         oniguruma-dev \
         icu-dev \
-        libxml2-dev
+        libxml2-dev \
+        sqlite-dev
 
 # Устанавливаем PHP расширения для Laravel
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_mysql \
+        pdo_sqlite \
         gd \
         zip \
         mbstring \
@@ -55,6 +57,7 @@ RUN apk add --no-cache \
         oniguruma \
         icu \
         libxml2 \
+        sqlite \
         mysql-client
 
 RUN addgroup -g 82 www-data 2>/dev/null || true \

@@ -19,8 +19,6 @@ services:
     container_name: liga-task-php
     volumes:
       - ./:/var/www
-    networks:
-      - all_services
     depends_on:
       mysql:
         condition: service_started

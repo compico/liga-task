@@ -31,6 +31,9 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
+      - name: Copy vite config
+        run: cp vite.config.ts.dist vite.config.ts
+
       - name: Install Node Dependencies
         run: npm ci
 

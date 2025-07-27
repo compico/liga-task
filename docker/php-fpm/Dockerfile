@@ -1,7 +1,7 @@
 FROM php:8.4-fpm-alpine AS base
 
 FROM base AS build
-# Устанавливаем зависимости для сборки
+
 RUN apk add --no-cache --virtual .build-deps \
         autoconf \
         g++ \
@@ -19,9 +19,9 @@ RUN apk add --no-cache --virtual .build-deps \
         oniguruma-dev \
         icu-dev \
         libxml2-dev \
-        sqlite-dev
+        sqlite-dev \
+        linux-headers
 
-# Устанавливаем PHP расширения для Laravel
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo \
@@ -58,7 +58,9 @@ RUN apk add --no-cache \
         icu \
         libxml2 \
         sqlite \
-        mysql-client
+        mysql-client \
+        bash \
+        make
 
 RUN addgroup -g 82 www-data 2>/dev/null || true \
     && adduser -u 1000 -G www-data -s /bin/sh -D -h /var/www appuser 2>/dev/null || true
@@ -80,7 +82,7 @@ RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.revalidate_freq=2" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/conf.d/opcache.ini
+    && echo "opcache.validate_timestamps=1" >> /usr/local/etc/php/conf.d/opcache.ini
 
 RUN mkdir -p /var/www/storage/logs \
     && mkdir -p /var/www/storage/framework/cache \

@@ -1,15 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('home');
+Route::get('/enable-dev-vite', function () {
+    if (!app()->environment('production')) {
+        return redirect('/')
+            ->withCookie(cookie('VITE_DEV', 'TRUE', 60));
+    }
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return redirect()->route('app');
+});
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
+
